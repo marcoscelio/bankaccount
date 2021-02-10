@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      args:
+        - PORT=${PORT}
+        - READ_TIMEOUT=${READ_TIMEOUT}
+        - WRITE_TIMEOUT=${WRITE_TIMEOUT}
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - PORT=${PORT}
+      - TIMEOUT=${TIMEOUT}
+    networks:
+      - bank-account-network
+    depends_on:
+      - "bank_account_db"
+  bank_account_db:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./db_data:/data/db"
+    networks:
+      - bank-account-network
+
+networks: 
+    bank-account-network:
+      driver: bridge
